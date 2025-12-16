@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我太难了</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        /* 白天模式变量 */
+        :root {
+            --bg-color: #f5f5f5;
+            --text-color: #333;
+            --card-bg: #fff;
+            --navbar-bg-transparent: transparent;
+            --navbar-text: #2c3e50;
+            --navbar-bg-scroll: #2c3e50;
+            --navbar-text-scroll: #fff;
+            --accent-color: #3498db;
+            --shadow-color: rgba(0,0,0,0.1);
+        }
+        /* 夜间模式变量 */
+        body.dark-mode {
+            --bg-color: #1a1a1a;
+            --text-color: #f0f0f0;
+            --card-bg: #2d2d2d;
+            --navbar-bg-transparent: rgba(26,26,26,0.5);
+            --navbar-text: #f0f0f0;
+            --navbar-bg-scroll: #121212;
+            --navbar-text-scroll: #f0f0f0;
+            --accent-color: #4fa3e0;
+            --shadow-color: rgba(0,0,0,0.3);
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding-top: 70px;
+            scroll-behavior: smooth;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        /* 滚动渐变导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 0;
+            text-align: center;
+            background-color: var(--navbar-bg-transparent);
+            transition: background-color 0.5s ease;
+            z-index: 999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+        .navbar a {
+            color: var(--navbar-text);
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .navbar a:hover {
+            color: var(--accent-color);
+        }
+        .navbar.scroll {
+            background-color: var(--navbar-bg-scroll);
+            box-shadow: 0 2px 10px var(--shadow-color);
+        }
+        .navbar.scroll a {
+            color: var(--navbar-text-scroll);
+        }
+        /* 夜间模式切换按钮 */
+        .theme-toggle {
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: none;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+        .theme-toggle:hover {
+            background-color: var(--accent-color);
+            color: #fff;
+        }
+        /* 头部样式 */
+        .header {
+            background-color: var(--navbar-bg-scroll);
+            color: var(--navbar-text-scroll);
+            text-align: center;
+            padding: 60px 0;
+            transition: background-color 0.3s ease;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+        /* 内容容器 */
+        .container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+        /* 关于我模块 */
+        .about {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .about h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+        .about p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        /* 作品展示模块 */
+        .works {
+            margin-bottom: 60px;
+        }
+        .works h2 {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--accent-color);
+        }
+        .work-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .work-item {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+        .work-item img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        .work-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+        /* 联系方式模块 */
+        .contact {
+            text-align: center;
+            padding: 30px;
+            background-color: var(--navbar-bg-scroll);
+            color: var(--navbar-text-scroll);
+            border-radius: 8px;
+            margin-bottom: 50px;
+            transition: background-color 0.3s ease;
+        }
+        .contact h2 {
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+        .contact p {
+            font-size: 1.1rem;
+            margin: 10px 0;
+        }
+        /* 回到顶部按钮 */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            background-color: var(--navbar-bg-scroll);
+            color: var(--navbar-text-scroll);
+            border-radius: 50%;
+            text-decoration: none;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 998;
+        }
+        .back-to-top.show {
+            opacity: 1;
+        }
+        .back-to-top:hover {
+            background-color: var(--accent-color);
+        }
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            .work-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .navbar {
+                gap: 10px;
+            }
+            .navbar a {
+                margin: 0 5px;
+                font-size: 1rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .work-list {
+                grid-template-columns: 1fr;
+            }
+            .back-to-top {
+                width: 40px;
+                height: 40px;
+                line-height: 40px;
+                bottom: 20px;
+                right: 20px;
+            }
+            .theme-toggle {
+                font-size: 0.8rem;
+                padding: 4px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <div class="navbar" id="navbar">
+        <a href=" ">李语迪</a >
+        <a href="#about">我</a >
+        <a href="#works">爱</a >
+        <a href="#contact">你</a >
+        <button class="theme-toggle" id="themeToggle">一秒黑化</button>
+    </div>
+
+    <div class="header" id="home">
+        <h1>李语迪我错了 呜呜呜呜</h1>
+        <p>我已经深刻意识到了自己的错误</p >
+    </div>
+
+    <div class="container">
+        <section class="about" id="about">
+            <h2>这是我的自我反思</h2>
+            <p>现在中国是共产主义社会 我深刻的意识到了自己做了对你不公平的事情 对不起 我抖音真的没什么 但是有个东西真的不能看 事关重大 请你谅解 但是我绝对没敢干对不起你的事情啊！！！冤枉啊 昨晚我翻来覆去睡不着 满脑子都是你的样子，心里又慌又疼 明明是一件小事，我却非要跟你争个输赢，只顾着自己的脾气，完全忽略了你的感受 你那么温柔体贴 处处包容我，我却不懂珍惜，还说那些让你难过的话，真的太混蛋了 我知道一句对不起不够，但我是真的知道错了。以后我一定改，遇事听你的，再也不跟你犟嘴，把你的话放在心里 你别不理我好不好？其实我昨晚说的都是气话呵呵哒<br>
+        </p >
+        </section>
+
+        <section class="works" id="works">
+            <h2>请选择我能做的</h2>
+            <div class="work-list">
+                <div class="work-item">
+                   
+                    <h3>满足一个愿望</h3>
+                </div>
+                <div class="work-item">
+                    
+                    <h3>陪你干任何事</h3>
+                </div>
+                <div class="work-item">
+                    
+                    <h3>涩涩【已自己掰开】</h3>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact" id="contact">
+            <h2>我再也不冷落你了</h2>
+            <p>求大人原谅小的这次吧~</p >
+            <p>小的我再也不敢了主人~</p >
+        </section>
+    </div>
+
+    <!-- 回到顶部按钮 -->
+    <a href="#home" class="back-to-top" id="backToTop">↑</a >
+
+    <script>
+        // 获取元素
+        const navbar = document.getElementById('navbar');
+        const backToTop = document.getElementById('backToTop');
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        // 监听滚动事件
+        window.addEventListener('scroll', function() {
+            // 导航栏变色逻辑
+            if (window.scrollY > 50) {
+                navbar.classList.add('scroll');
+            } else {
+                navbar.classList.remove('scroll');
+            }
+
+            // 回到顶部按钮显示逻辑
+            if (window.scrollY > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+
+        // 夜间模式切换逻辑
+        themeToggle.addEventListener('click', function() {
+            body.classList.toggle('dark-mode');
+            // 修改按钮文字
+            if (body.classList.contains('dark-mode')) {
+                themeToggle.textContent = '选择原谅';
+            } else {
+                themeToggle.textContent = '再次黑化';
+            }
+        });
+    </script>
+</body>
+</html>
+ 
